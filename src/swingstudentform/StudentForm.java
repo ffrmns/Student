@@ -28,11 +28,11 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 public class StudentForm {
-	private ActionListener 		addStudent,deleteEntry,editEntry,displayList,toFile,fromFile;
+	private ActionListener 		addStudent,deleteEntry,editEntry,displayList,toFile,fromFile,toDatabase,fromDatabase;
 	private ArrayList<Student> 	studentArray;
 	private Container 			contentPane;
 	private File				selectedFile;
-	private JButton 			addButton, deleteButton, editButton, displayButton, saveButton, loadButton;
+	private JButton 			addButton, deleteButton, editButton, displayButton, saveButton, loadButton, storeButton, retrieveButton;
 	private JFrame 				frame;
 	private JLabel 				studentNameLabel, studentYearLabel, studentIDLabel;
 	private JTextField 			studentNameTextField, studentYearTextField, studentIDTextField;
@@ -201,6 +201,24 @@ public class StudentForm {
 				}
 			}
 		};
+		
+		toDatabase = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+		
+		fromDatabase = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
 	}
 	
 	/**
@@ -219,6 +237,8 @@ public class StudentForm {
 		contentPane.add(displayButton);
 		contentPane.add(saveButton);
 		contentPane.add(loadButton);
+		contentPane.add(storeButton);
+		contentPane.add(retrieveButton);
 	}
 	
 	/**
@@ -234,6 +254,8 @@ public class StudentForm {
 		displayButton.addActionListener(displayList);
 		saveButton.addActionListener(toFile);		
 		loadButton.addActionListener(fromFile);
+		storeButton.addActionListener(toDatabase);
+		retrieveButton.addActionListener(fromDatabase);
 	}
 	
 	/**
@@ -252,6 +274,8 @@ public class StudentForm {
 		displayButton 			= new JButton("Display");
 		saveButton 				= new JButton("Save");
 		loadButton 				= new JButton("Load");
+		storeButton				= new JButton("Store");
+		retrieveButton			= new JButton("Retrieve");
 	}
 	
 	/**
@@ -317,5 +341,15 @@ public class StudentForm {
 		layouter.putConstraint(SpringLayout.EAST,editButton,0,SpringLayout.EAST,addButton);
 		layouter.putConstraint(SpringLayout.WEST,loadButton,0,SpringLayout.WEST,displayButton);
 		layouter.putConstraint(SpringLayout.EAST,loadButton,0,SpringLayout.EAST,displayButton);
+		
+		/*
+		 * row 4 buttons
+		 */
+		layouter.putConstraint(SpringLayout.NORTH,storeButton,5,SpringLayout.SOUTH,editButton);
+		layouter.putConstraint(SpringLayout.NORTH,retrieveButton, 0, SpringLayout.NORTH,storeButton);
+		layouter.putConstraint(SpringLayout.WEST,storeButton,0,SpringLayout.WEST,addButton);
+		layouter.putConstraint(SpringLayout.EAST,storeButton,0,SpringLayout.EAST,addButton);
+		layouter.putConstraint(SpringLayout.WEST,retrieveButton,0,SpringLayout.WEST,displayButton);
+		layouter.putConstraint(SpringLayout.EAST,retrieveButton,0,SpringLayout.EAST,displayButton);
 	}
 }
