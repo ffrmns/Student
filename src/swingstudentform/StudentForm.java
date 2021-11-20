@@ -3,17 +3,20 @@ package swingstudentform;
 
 import java.awt.Container;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -36,6 +39,9 @@ public class StudentForm {
 	private JFrame 				frame;
 	private JLabel 				studentNameLabel, studentYearLabel, studentIDLabel;
 	private JTextField 			studentNameTextField, studentYearTextField, studentIDTextField;
+	private final static String databaseURL = "jdbc:oracle:thin:@172.17.0.2:1521/ORCLPDB1";
+	private final static String usernameDB = "ffa";
+	private final static String passwordDB = "passwordffa";
 
 	/**
 	 * Launch the application.
@@ -86,7 +92,6 @@ public class StudentForm {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				System.out.println("clicked!");
 				System.out.println(studentNameTextField.getText());
 				System.out.println(studentYearTextField.getText());
@@ -103,7 +108,6 @@ public class StudentForm {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				studentArray.remove(studentArray.size()-1);
 			}
 		};
@@ -116,20 +120,57 @@ public class StudentForm {
 				JFrame editFrame = new JFrame("Edit Student List");
 				editFrame.setBounds(550,100,450,300);
 				editFrame.setVisible(true);
-				JPanel mainPanel = new JPanel(new GridLayout(2,1));
-				JPanel searchPanel = new JPanel(new GridLayout(2,1));
-				JPanel showPanel = new JPanel(new GridLayout(2,1));
-				searchPanel.setBorder(BorderFactory.createTitledBorder("Search Panel"));
-				showPanel.setBorder(BorderFactory.createTitledBorder("Show Panel"));
-				mainPanel.add(searchPanel);
-				mainPanel.add(showPanel);
-				JTextField searchField = new JTextField();
-				JTextField editField = new JTextField();
-				JTextArea searchResult = new JTextArea();
-				searchPanel.add(searchField);
-				searchPanel.add(editField);
-				showPanel.add(searchResult);
+				JPanel mainPanel = new JPanel(new GridLayout(1,1));
+				JPanel editPanel = new JPanel(new GridLayout(3,1));
+				
+				JPanel editOriginPanel = new JPanel(new GridLayout(1,2));
+				JPanel editDestinationPanel = new JPanel(new GridLayout(1,2));				
+				JLabel editOriginLabel = new JLabel("Edit from name, year, and ID:");
+				JLabel editDestinationLabel = new JLabel("Edit to:");
+				JTextField editOriginField = new JTextField("Fikri,2015,18115011");
+				JTextField editDestinationField = new JTextField("Fikri contoh,2021,18121011");
+				JButton changeButton = new JButton("Change!");
+
+				editOriginPanel.add(editOriginLabel);
+				editOriginPanel.add(editOriginField);
+				editDestinationPanel.add(editDestinationLabel);
+				editDestinationPanel.add(editDestinationField);				
+				editPanel.add(editOriginPanel);
+				editPanel.add(editDestinationPanel);				
+				editPanel.add(changeButton);
+				
+				editPanel.setBorder(BorderFactory.createTitledBorder("Search Panel"));
+				mainPanel.add(editPanel);
 				editFrame.getContentPane().add(mainPanel);
+				
+				ActionListener changeAction = new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						System.out.println("Change button clicked!");
+						ListIterator<Student> iteratorStudent = studentArray.listIterator();
+						try {
+							String[] editOriginList = editOriginField.getText().split(",");
+							String[] editDestinationList = editDestinationField.getText().split(",");
+							while (iteratorStudent.hasNext()) {
+								Student currentStudent = iteratorStudent.next();
+								if (currentStudent.getStudentName().equals(editOriginList[0]) && currentStudent.getStudentYear().equals(editOriginList[1]) && currentStudent.getStudentID().equals(editOriginList[2])) {
+									System.out.println("Found at index: "+ (iteratorStudent.nextIndex()-1));
+									System.out.println("Before: " + currentStudent.getStudentName() + "," + currentStudent.getStudentYear() + "," + currentStudent.getStudentID());
+									currentStudent.setStudentName(editDestinationList[0]);
+									currentStudent.setStudentYear(editDestinationList[1]);
+									currentStudent.setStudentID(editDestinationList[2]);
+									System.out.println("After: "+ currentStudent.getStudentName() + "," + currentStudent.getStudentYear() + "," + currentStudent.getStudentID());
+								}
+							}
+						} catch (SecurityException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				};
+				changeButton.addActionListener(changeAction);
+				
 			}
 		};
 		
@@ -137,7 +178,6 @@ public class StudentForm {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				JFrame displayFrame = new JFrame("List of students:");
 				displayFrame.setBounds(550, 100, 450, 300);
 				displayFrame.setVisible(true);
@@ -154,7 +194,6 @@ public class StudentForm {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				JFileChooser fileSave = new JFileChooser();
 				fileSave.setSelectedFile(new File("../../StudentListFromEclipseWorkspace2.txt"));
 				fileSave.showSaveDialog(null);
@@ -173,7 +212,6 @@ public class StudentForm {
 					}
 					System.out.println("File written!");
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -183,7 +221,6 @@ public class StudentForm {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				JFileChooser openFile = new JFileChooser();
 				openFile.showOpenDialog(null);
 				selectedFile = openFile.getSelectedFile();
@@ -196,7 +233,6 @@ public class StudentForm {
 					while (scanner.hasNext())
 					studentArray.add(new Student(scanner.next(),scanner.next(),scanner.next()));
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -206,7 +242,26 @@ public class StudentForm {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				
+				Connection conn;
+				String statement;
+				try {
+					conn = DriverManager.getConnection(databaseURL,usernameDB,passwordDB);
+					statement = "INSERT INTO student_database (student_name,student_year,student_id) VALUES (?,?,?)";
+					PreparedStatement preparedStatement = conn.prepareStatement(statement);
+					int count = 0;
+					for (Student student : studentArray) {
+						preparedStatement.setString(1, student.getStudentName());
+						preparedStatement.setString(2, student.getStudentYear());
+						preparedStatement.setString(3, student.getStudentID());
+						count = preparedStatement.executeUpdate();
+					}
+					System.out.println("Added " + count + " row to database!");
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				
 			}
 		};
@@ -216,6 +271,20 @@ public class StudentForm {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				Connection connection;
+				try {
+					connection = DriverManager.getConnection(databaseURL, usernameDB, passwordDB);
+					String statement = "SELECT * FROM student_database";
+					PreparedStatement preparedStatement = connection.prepareStatement(statement);
+					ResultSet resultSet = preparedStatement.executeQuery();
+					while (resultSet.next()) {
+						studentArray.add (new Student(resultSet.getString(1),
+												  resultSet.getString(2),
+												  resultSet.getString(3))); 
+					};
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 				
 			}
 		};
