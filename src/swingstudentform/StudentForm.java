@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -92,15 +93,26 @@ public class StudentForm {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("clicked!");
-				System.out.println(studentNameTextField.getText());
-				System.out.println(studentYearTextField.getText());
-				System.out.println(studentIDTextField.getText());
-				
-				studentArray.add(new Student(studentNameTextField.getText(),
-											 studentYearTextField.getText(),
-											 studentIDTextField.getText()));
-				System.out.println(studentArray.size());
+				String enteredStudentName = studentNameTextField.getText();
+				String enteredStudentYear = studentYearTextField.getText();
+				String enteredStudentID = studentIDTextField.getText();
+				if (enteredStudentName.length() == 0) {
+					JOptionPane.showMessageDialog(null, "Name must not be empty!");
+				} else if (enteredStudentYear.length() != 4) {
+					JOptionPane.showMessageDialog(null, "Student year is must have four length!");
+				} else if (enteredStudentID.length() != 5) {
+					JOptionPane.showMessageDialog(null, "Student ID length must have exact length of 5"); 
+				} else {
+					System.out.println("clicked!");
+					System.out.println(enteredStudentName);
+					System.out.println(enteredStudentYear);
+					System.out.println(enteredStudentID);
+					
+					studentArray.add(new Student(enteredStudentName,
+												 enteredStudentYear,
+												 enteredStudentID));
+					System.out.println(studentArray.size());
+				}
 			}
 		};
 		
