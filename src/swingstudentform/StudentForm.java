@@ -37,9 +37,11 @@ public class StudentForm {
 	private Container 			contentPane;
 	private File				selectedFile;
 	private JButton 			addButton, deleteButton, editButton, displayButton, saveButton, loadButton, storeButton, retrieveButton;
+	private JButton				masterLeftButton, masterRightButton;
 	private JFrame 				frame;
 	private JLabel 				studentNameLabel, studentYearLabel, studentIDLabel;
 	private JTextField 			studentNameTextField, studentYearTextField, studentIDTextField;
+	private JTextField			lastInputTextField;
 	private final static String databaseURL = "jdbc:oracle:thin:@172.17.0.2:1521/ORCLPDB1";
 	private final static String usernameDB = "ffa";
 	private final static String passwordDB = "passwordffa";
@@ -366,71 +368,51 @@ public class StudentForm {
 		SpringLayout layouter = new SpringLayout();
 		contentPane.setLayout(layouter);
 		
-		/*
-		 * row 1 form
-		 */
-		layouter.putConstraint(SpringLayout.VERTICAL_CENTER,studentNameLabel,0,SpringLayout.VERTICAL_CENTER,studentNameTextField);
-		layouter.putConstraint(SpringLayout.NORTH,studentNameTextField,20,SpringLayout.NORTH,contentPane);
-		layouter.putConstraint(SpringLayout.WEST,studentNameLabel,22,SpringLayout.WEST,contentPane);
-		layouter.putConstraint(SpringLayout.WEST,studentNameTextField,20,SpringLayout.EAST,studentNameLabel);
-		layouter.putConstraint(SpringLayout.EAST,studentNameTextField,-22,SpringLayout.EAST,contentPane);
+		masterInputRow(layouter, studentNameLabel, studentNameTextField);
+		newInputRow(layouter, studentYearLabel, studentYearTextField, studentNameTextField);
+		newInputRow(layouter, studentIDLabel, studentIDTextField, studentYearTextField);		
+		masterButtonRow(layouter, addButton, displayButton);
+		newButtonRow(layouter, deleteButton, saveButton, addButton);
+		newButtonRow(layouter, editButton, loadButton, deleteButton);
+		newButtonRow(layouter, storeButton, retrieveButton, editButton);
 		
-		/*
-		 * row 2 form
-		 */
-		layouter.putConstraint(SpringLayout.VERTICAL_CENTER,studentYearLabel,0,SpringLayout.VERTICAL_CENTER,studentYearTextField);
-		layouter.putConstraint(SpringLayout.NORTH,studentYearTextField,5,SpringLayout.SOUTH,studentNameTextField);
-		layouter.putConstraint(SpringLayout.WEST,studentYearLabel,0,SpringLayout.WEST,studentNameLabel);
-		layouter.putConstraint(SpringLayout.WEST,studentYearTextField,0,SpringLayout.WEST,studentNameTextField);
-		layouter.putConstraint(SpringLayout.EAST,studentYearTextField,0,SpringLayout.EAST,studentNameTextField);
-		
-		/*
-		 * row 3 form 
-		 */
-		layouter.putConstraint(SpringLayout.VERTICAL_CENTER,studentIDLabel,0,SpringLayout.VERTICAL_CENTER,studentIDTextField);
-		layouter.putConstraint(SpringLayout.NORTH,studentIDTextField,5,SpringLayout.SOUTH,studentYearTextField);
-		layouter.putConstraint(SpringLayout.WEST,studentIDLabel,0,SpringLayout.WEST,studentNameLabel);
-		layouter.putConstraint(SpringLayout.WEST,studentIDTextField,0,SpringLayout.WEST,studentNameTextField);
-		layouter.putConstraint(SpringLayout.EAST,studentIDTextField,0,SpringLayout.EAST,studentNameTextField);
-		
-		/*
-		 * row 1 buttons
-		 */
-		layouter.putConstraint(SpringLayout.NORTH,addButton,30,SpringLayout.SOUTH,studentIDTextField);
-		layouter.putConstraint(SpringLayout.NORTH,displayButton,0,SpringLayout.NORTH,addButton);
-		layouter.putConstraint(SpringLayout.WEST,addButton,26,SpringLayout.WEST,contentPane);
-		layouter.putConstraint(SpringLayout.EAST,addButton,-3,SpringLayout.HORIZONTAL_CENTER,contentPane);
-		layouter.putConstraint(SpringLayout.WEST,displayButton,3,SpringLayout.HORIZONTAL_CENTER,contentPane);
-		layouter.putConstraint(SpringLayout.EAST,displayButton,-26,SpringLayout.EAST,contentPane);
-		
-		/*
-		 * row 2 buttons
-		 */
-		layouter.putConstraint(SpringLayout.NORTH,deleteButton,5,SpringLayout.SOUTH,addButton);
-		layouter.putConstraint(SpringLayout.NORTH,saveButton,0,SpringLayout.NORTH,deleteButton);
-		layouter.putConstraint(SpringLayout.WEST,deleteButton,0,SpringLayout.WEST,addButton);
-		layouter.putConstraint(SpringLayout.EAST,deleteButton,0,SpringLayout.EAST,addButton);
-		layouter.putConstraint(SpringLayout.WEST,saveButton,0,SpringLayout.WEST,displayButton);
-		layouter.putConstraint(SpringLayout.EAST,saveButton,0,SpringLayout.EAST,displayButton);
-		
-		/*
-		 * row 3 buttons
-		 */
-		layouter.putConstraint(SpringLayout.NORTH,editButton,5,SpringLayout.SOUTH,deleteButton);
-		layouter.putConstraint(SpringLayout.NORTH,loadButton, 0, SpringLayout.NORTH,editButton);
-		layouter.putConstraint(SpringLayout.WEST,editButton,0,SpringLayout.WEST,addButton);
-		layouter.putConstraint(SpringLayout.EAST,editButton,0,SpringLayout.EAST,addButton);
-		layouter.putConstraint(SpringLayout.WEST,loadButton,0,SpringLayout.WEST,displayButton);
-		layouter.putConstraint(SpringLayout.EAST,loadButton,0,SpringLayout.EAST,displayButton);
-		
-		/*
-		 * row 4 buttons
-		 */
-		layouter.putConstraint(SpringLayout.NORTH,storeButton,5,SpringLayout.SOUTH,editButton);
-		layouter.putConstraint(SpringLayout.NORTH,retrieveButton, 0, SpringLayout.NORTH,storeButton);
-		layouter.putConstraint(SpringLayout.WEST,storeButton,0,SpringLayout.WEST,addButton);
-		layouter.putConstraint(SpringLayout.EAST,storeButton,0,SpringLayout.EAST,addButton);
-		layouter.putConstraint(SpringLayout.WEST,retrieveButton,0,SpringLayout.WEST,displayButton);
-		layouter.putConstraint(SpringLayout.EAST,retrieveButton,0,SpringLayout.EAST,displayButton);
+	}
+	
+	private void masterInputRow(SpringLayout layouter, JLabel inputLabel, JTextField inputTextField) {
+		layouter.putConstraint(SpringLayout.VERTICAL_CENTER,inputLabel,0,SpringLayout.VERTICAL_CENTER,inputTextField);
+		layouter.putConstraint(SpringLayout.NORTH,inputTextField,20,SpringLayout.NORTH,contentPane);
+		layouter.putConstraint(SpringLayout.WEST,inputLabel,22,SpringLayout.WEST,contentPane);
+		layouter.putConstraint(SpringLayout.WEST,inputTextField,20,SpringLayout.EAST,inputLabel);
+		layouter.putConstraint(SpringLayout.EAST,inputTextField,-22,SpringLayout.EAST,contentPane);
+		this.lastInputTextField = inputTextField;
+	}
+	
+	private void newInputRow(SpringLayout layouter, JLabel inputLabel, JTextField inputTextField, JTextField aboveTextField) {
+		layouter.putConstraint(SpringLayout.VERTICAL_CENTER,inputLabel,0,SpringLayout.VERTICAL_CENTER,inputTextField);
+		layouter.putConstraint(SpringLayout.NORTH,inputTextField,5,SpringLayout.SOUTH,aboveTextField);
+		layouter.putConstraint(SpringLayout.WEST,inputLabel,0,SpringLayout.WEST,studentNameLabel);
+		layouter.putConstraint(SpringLayout.WEST,inputTextField,0,SpringLayout.WEST,studentNameTextField);
+		layouter.putConstraint(SpringLayout.EAST,inputTextField,0,SpringLayout.EAST,studentNameTextField);
+		this.lastInputTextField = inputTextField;
+	}
+	
+	private void masterButtonRow(SpringLayout layouter, JButton leftButton, JButton rightButton) {
+		layouter.putConstraint(SpringLayout.NORTH,leftButton,30,SpringLayout.SOUTH,this.lastInputTextField);
+		layouter.putConstraint(SpringLayout.NORTH,rightButton,0,SpringLayout.NORTH,leftButton);
+		layouter.putConstraint(SpringLayout.WEST,leftButton,26,SpringLayout.WEST,contentPane);
+		layouter.putConstraint(SpringLayout.EAST,leftButton,-3,SpringLayout.HORIZONTAL_CENTER,contentPane);
+		layouter.putConstraint(SpringLayout.WEST,rightButton,3,SpringLayout.HORIZONTAL_CENTER,contentPane);
+		layouter.putConstraint(SpringLayout.EAST,rightButton,-26,SpringLayout.EAST,contentPane);
+		this.masterLeftButton = leftButton;
+		this.masterRightButton = rightButton;
+	}
+	
+	private void newButtonRow(SpringLayout layouter, JButton leftButton, JButton rightButton, JButton aboveLeftButton) {
+		layouter.putConstraint(SpringLayout.NORTH,leftButton,5,SpringLayout.SOUTH,aboveLeftButton);
+		layouter.putConstraint(SpringLayout.NORTH,rightButton, 0, SpringLayout.NORTH,leftButton);
+		layouter.putConstraint(SpringLayout.WEST,leftButton,0,SpringLayout.WEST,this.masterLeftButton);
+		layouter.putConstraint(SpringLayout.EAST,leftButton,0,SpringLayout.EAST,this.masterLeftButton);
+		layouter.putConstraint(SpringLayout.WEST,rightButton,0,SpringLayout.WEST,this.masterRightButton);
+		layouter.putConstraint(SpringLayout.EAST,rightButton,0,SpringLayout.EAST,this.masterRightButton);
 	}
 }
