@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ListIterator;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -27,9 +28,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 public class StudentForm {
 	private ActionListener 		addStudent,deleteEntry,editEntry,displayList,toFile,fromFile,toDatabase,fromDatabase;
@@ -196,11 +202,75 @@ public class StudentForm {
 				displayFrame.setBounds(550, 100, 450, 300);
 				displayFrame.setVisible(true);
 				Container displayContentPane = displayFrame.getContentPane();
-				
-				String studentInCsv = "";
-				for (Student student : studentArray)
-				studentInCsv += student.getStudentName() + "," + student.getStudentYear() + "," + student.getStudentID() + "\n";
-				displayContentPane.add(new JTextArea(studentInCsv));
+				JButton textView = new JButton("Text view");
+				JButton tableView = new JButton("Table view");
+				displayContentPane.setLayout(new GridLayout(1,2));
+				displayContentPane.add(textView);
+				displayContentPane.add(tableView);
+				ActionListener textViewAction = new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						JFrame textDisplayFrame = new JFrame("List of students:");
+						textDisplayFrame.setBounds(550, 100, 450, 300);
+						textDisplayFrame.setVisible(true);
+						Container textDisplayContentPane = textDisplayFrame.getContentPane();
+						String studentInCsv = "";
+						for (Student student : studentArray)
+						studentInCsv += student.getStudentName() + "," + student.getStudentYear() + "," + student.getStudentID() + "\n";
+						textDisplayContentPane.add(new JTextArea(studentInCsv));						
+					}
+				};
+				ActionListener tableViewAction = new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						JFrame tableDisplayFrame = new JFrame("List of students");
+						tableDisplayFrame.setBounds(550, 100, 450, 300);
+						tableDisplayFrame.setVisible(true);
+						Container tableDisplayContentPane = tableDisplayFrame.getContentPane();
+						TableModel tableModel = new AbstractTableModel() {
+							
+							/**
+							 * 
+							 */
+							private static final long serialVersionUID = 1L;
+
+							@Override
+							public Object getValueAt(int rowIndex, int columnIndex) {
+								switch (columnIndex) {
+									case 0: return studentArray.get(rowIndex).getStudentName();
+									case 1: return studentArray.get(rowIndex).getStudentYear();
+									case 2: return studentArray.get(rowIndex).getStudentID();
+									default: return null;
+								}
+							}
+							
+							@Override
+							public int getRowCount() {
+								// TODO Auto-generated method stub
+								return studentArray.size();
+							}
+							
+							@Override
+							public int getColumnCount() {
+								// TODO Auto-generated method stub
+								return 3;
+							}
+						};
+						TableColumnModel tableColumnModel = new JTable(tableModel).getColumnModel();
+						JTable tableDisplay = new JTable(tableModel,tableColumnModel);
+						ArrayList<String> tableHeader = new ArrayList<String>(Arrays.asList("Student Name", "Student Year", "Student ID"));
+						ListIterator<String> listIteratorTableHeader = tableHeader.listIterator();
+						while (listIteratorTableHeader.hasNext()) {
+							tableColumnModel.getColumn(listIteratorTableHeader.nextIndex()).setHeaderValue(listIteratorTableHeader.next());	
+						}
+						tableDisplayContentPane.add(new JScrollPane(tableDisplay));
+					}
+				};
+				textView.addActionListener(textViewAction);
+				tableView.addActionListener(tableViewAction);
 			}
 		};
 		
