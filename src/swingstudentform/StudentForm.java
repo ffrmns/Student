@@ -2,6 +2,7 @@ package swingstudentform;
 
 
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -32,7 +33,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -40,7 +44,7 @@ import javax.swing.table.TableModel;
 public class StudentForm {
 	private ActionListener 		addStudent,deleteEntry,editEntry,displayList,toFile,fromFile,toDatabase,fromDatabase;
 	private ArrayList<Student> 	studentArray;
-	private Container 			contentPane;
+	private JPanel 			contentPane;
 	private File				selectedFile;
 	private JButton 			addButton, deleteButton, editButton, displayButton, saveButton, loadButton, storeButton, retrieveButton;
 	private JButton				masterLeftButton, masterRightButton;
@@ -48,6 +52,18 @@ public class StudentForm {
 	private JLabel 				studentNameLabel, studentYearLabel, studentIDLabel;
 	private JTextField 			studentNameTextField, studentYearTextField, studentIDTextField;
 	private JTextField			lastInputTextField;
+	private JButton scoreButton;
+	private JButton libraryButton;
+	private JButton canteenButton;
+	private JButton courseButton;
+	private JButton studyButton;
+	private JButton summaryButton;
+	private JButton searchButton;
+	private JButton serveButton;
+	private JButton webButton;
+	private JButton logButton;
+	private JButton trendButton;
+	private JButton connectButton;
 	private final static String databaseURL = "jdbc:oracle:thin:@172.17.0.2:1521/ORCLPDB1";
 	private final static String usernameDB = "ffa";
 	private final static String passwordDB = "passwordffa";
@@ -79,11 +95,24 @@ public class StudentForm {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		UIManager.LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
+		for (UIManager.LookAndFeelInfo look : looks)System.out.println(look.getClassName());
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		frame = new JFrame("Student Form");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				
-		contentPane = frame.getContentPane();
+		
+		contentPane = new JPanel();
+		JScrollPane scrollPane = new JScrollPane(contentPane);
+		contentPane.setPreferredSize(new Dimension(400,600));
+		frame.add(scrollPane);
 		instantiateFormAndButton();
 		
 		actionListenerForButton();
@@ -378,20 +407,7 @@ public class StudentForm {
 	 * Adding form and button to JFrame Content Pane
 	 */
 	private void addComponentToJFrame () {
-		contentPane.add(studentNameLabel);
-		contentPane.add(studentNameTextField);
-		contentPane.add(studentYearLabel);
-		contentPane.add(studentYearTextField);
-		contentPane.add(studentIDLabel);
-		contentPane.add(studentIDTextField);
-		contentPane.add(addButton);
-		contentPane.add(deleteButton);
-		contentPane.add(editButton);
-		contentPane.add(displayButton);
-		contentPane.add(saveButton);
-		contentPane.add(loadButton);
-		contentPane.add(storeButton);
-		contentPane.add(retrieveButton);
+
 	}
 	
 	/**
@@ -429,6 +445,18 @@ public class StudentForm {
 		loadButton 				= new JButton("Load");
 		storeButton				= new JButton("Store");
 		retrieveButton			= new JButton("Retrieve");
+		scoreButton				= new JButton("Score");
+		libraryButton			= new JButton("Library");
+		canteenButton			= new JButton("Canteen");
+		courseButton			= new JButton("Course");
+		studyButton				= new JButton("Study");
+		summaryButton			= new JButton("Summary");
+		searchButton			= new JButton("Search");
+		serveButton				= new JButton("Serve");
+		webButton				= new JButton("Web");
+		logButton				= new JButton("Log");
+		trendButton				= new JButton("Trend");
+		connectButton			= new JButton("Connect");
 	}
 	
 	/**
@@ -445,10 +473,17 @@ public class StudentForm {
 		newButtonRow(layouter, deleteButton, saveButton, addButton);
 		newButtonRow(layouter, editButton, loadButton, deleteButton);
 		newButtonRow(layouter, storeButton, retrieveButton, editButton);
-		
+		newButtonRow(layouter, scoreButton, libraryButton, storeButton);
+		newButtonRow(layouter, canteenButton, courseButton, scoreButton);
+		newButtonRow(layouter, studyButton, summaryButton, canteenButton);
+		newButtonRow(layouter, searchButton, serveButton, studyButton);
+		newButtonRow(layouter, webButton, logButton, searchButton);
+		newButtonRow(layouter, trendButton, connectButton, webButton);
 	}
 	
 	private void masterInputRow(SpringLayout layouter, JLabel inputLabel, JTextField inputTextField) {
+		contentPane.add(inputLabel);
+		contentPane.add(inputTextField);
 		layouter.putConstraint(SpringLayout.VERTICAL_CENTER,inputLabel,0,SpringLayout.VERTICAL_CENTER,inputTextField);
 		layouter.putConstraint(SpringLayout.NORTH,inputTextField,20,SpringLayout.NORTH,contentPane);
 		layouter.putConstraint(SpringLayout.WEST,inputLabel,22,SpringLayout.WEST,contentPane);
@@ -458,6 +493,8 @@ public class StudentForm {
 	}
 	
 	private void newInputRow(SpringLayout layouter, JLabel inputLabel, JTextField inputTextField, JTextField aboveTextField) {
+		contentPane.add(inputLabel);
+		contentPane.add(inputTextField);
 		layouter.putConstraint(SpringLayout.VERTICAL_CENTER,inputLabel,0,SpringLayout.VERTICAL_CENTER,inputTextField);
 		layouter.putConstraint(SpringLayout.NORTH,inputTextField,5,SpringLayout.SOUTH,aboveTextField);
 		layouter.putConstraint(SpringLayout.WEST,inputLabel,0,SpringLayout.WEST,studentNameLabel);
@@ -467,6 +504,8 @@ public class StudentForm {
 	}
 	
 	private void masterButtonRow(SpringLayout layouter, JButton leftButton, JButton rightButton) {
+		contentPane.add(leftButton);
+		contentPane.add(rightButton);
 		layouter.putConstraint(SpringLayout.NORTH,leftButton,30,SpringLayout.SOUTH,this.lastInputTextField);
 		layouter.putConstraint(SpringLayout.NORTH,rightButton,0,SpringLayout.NORTH,leftButton);
 		layouter.putConstraint(SpringLayout.WEST,leftButton,26,SpringLayout.WEST,contentPane);
@@ -478,6 +517,8 @@ public class StudentForm {
 	}
 	
 	private void newButtonRow(SpringLayout layouter, JButton leftButton, JButton rightButton, JButton aboveLeftButton) {
+		contentPane.add(leftButton);
+		contentPane.add(rightButton);
 		layouter.putConstraint(SpringLayout.NORTH,leftButton,5,SpringLayout.SOUTH,aboveLeftButton);
 		layouter.putConstraint(SpringLayout.NORTH,rightButton, 0, SpringLayout.NORTH,leftButton);
 		layouter.putConstraint(SpringLayout.WEST,leftButton,0,SpringLayout.WEST,this.masterLeftButton);
