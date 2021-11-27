@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="/home/ffa/solr-8.11.0/solr/solrj/lib/httpcore-4.4.14.jar"/>
+	<classpathentry kind="lib" path="/home/ffa/solr-8.11.0/solr/solrj/lib/httpclient-4.5.13.jar"/>
+	<classpathentry kind="lib" path="/home/ffa/solr-8.11.0/solr/solrj/lib/httpmime-4.5.13.jar"/>
+	<classpathentry kind="lib" path="/home/ffa/solr-8.11.0/solr/solrj/lib/slf4j-api-1.7.24.jar"/>
+	<classpathentry kind="lib" path="/home/ffa/solr-8.11.0/solr/core/test-lib/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="/home/ffa/solr-8.11.0/solr/solrj/lib/zookeeper-3.6.2.jar"/>
+	<classpathentry kind="lib" path="/home/ffa/solr-8.11.0/solr/core/lib/log4j-slf4j-impl-2.14.1.jar"/>
+	<classpathentry kind="lib" path="/home/ffa/solr-8.11.0/solr/core/lib/log4j-api-2.14.1.jar"/>
+	<classpathentry kind="lib" path="/home/ffa/solr-8.11.0/solr/core/lib/log4j-core-2.14.1.jar"/>
+	<classpathentry kind="lib" path="/home/ffa/solr-8.11.0/solr/solrj/lib/commons-io-2.8.0.jar"/>
+	<classpathentry kind="lib" path="/home/ffa/solr-8.11.0/solr/dist/solr-solrj-8.11.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/ffa/jdbc/lib/ojdbc8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

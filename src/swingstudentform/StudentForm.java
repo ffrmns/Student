@@ -33,7 +33,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -64,6 +63,7 @@ public class StudentForm {
 	private JButton logButton;
 	private JButton trendButton;
 	private JButton connectButton;
+	private ActionListener search;
 	private final static String databaseURL = "jdbc:oracle:thin:@172.17.0.2:1521/ORCLPDB1";
 	private final static String usernameDB = "ffa";
 	private final static String passwordDB = "passwordffa";
@@ -401,6 +401,14 @@ public class StudentForm {
 				
 			}
 		};
+		search = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new SearchFrame();
+				
+			}
+		};
 	}
 	
 	/**
@@ -425,6 +433,7 @@ public class StudentForm {
 		loadButton.addActionListener(fromFile);
 		storeButton.addActionListener(toDatabase);
 		retrieveButton.addActionListener(fromDatabase);
+		searchButton.addActionListener(search);
 	}
 	
 	/**
