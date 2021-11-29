@@ -64,6 +64,7 @@ public class StudentForm {
 	private JButton trendButton;
 	private JButton connectButton;
 	private ActionListener search;
+	private ActionListener serve;
 	private final static String databaseURL = "jdbc:oracle:thin:@172.17.0.2:1521/ORCLPDB1";
 	private final static String usernameDB = "ffa";
 	private final static String passwordDB = "passwordffa";
@@ -409,6 +410,14 @@ public class StudentForm {
 				
 			}
 		};
+		serve = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				new ServeAPI(studentArray);
+			}
+		};
 	}
 	
 	/**
@@ -434,6 +443,7 @@ public class StudentForm {
 		storeButton.addActionListener(toDatabase);
 		retrieveButton.addActionListener(fromDatabase);
 		searchButton.addActionListener(search);
+		serveButton.addActionListener(serve);
 	}
 	
 	/**
