@@ -42,6 +42,7 @@ import javax.swing.table.TableModel;
 
 public class StudentForm {
 	private ActionListener 		addStudent,deleteEntry,editEntry,displayList,toFile,fromFile,toDatabase,fromDatabase;
+	private ActionListener		manageScore, manageLibrary, manageCanteen, manageCourse;
 	private ArrayList<Student> 	studentArray;
 	private JPanel 			contentPane;
 	private File				selectedFile;
@@ -402,6 +403,43 @@ public class StudentForm {
 				
 			}
 		};
+		
+		manageScore = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				new ScoreFrame(studentArray);
+			}
+		};
+		
+		manageLibrary = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				new LibraryFrame(studentArray);
+			}
+		};
+		
+		manageCanteen = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				new CanteenFrame(studentArray);
+			}
+		};
+		
+		manageCourse = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				new CourseFrame(studentArray);
+			}
+		};
+		
 		search = new ActionListener() {
 			
 			@Override
